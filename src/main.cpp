@@ -38,11 +38,15 @@ int main(int argc, char *argv[]) {
   model.categorize_images();
   model.initial_digits();
 
+  // reserving space for vector to prevent segment faults
   file_table.reserve(no_of_digits);
+
   for (int i = 0; i < no_of_digits; i++) {
     std::vector<std::vector<double>> double_vector(28);
+
     for (int j = 0; j < 28; j++) {
       std::vector<double> one_d(28);
+
       for (int k = 0; k < 28; k++) {
         one_d.push_back(0);
       }
@@ -51,34 +55,42 @@ int main(int argc, char *argv[]) {
     file_table.push_back(double_vector);
   }
 
-  if (argc == 4) {
+  do {
+    cout << "Do you wish to run default? (yes/no)" << endl;
+    cin >> choice;
+  } while (choice != "yes" and choice != "no");
 
-    images = model.read_file(argv[1]);
-    labels_from_file = model.read_label(argv[2]);
-
-    file_table = model.read_table(argv[3]);
-    model.initialize_table(file_table);
-
-    default_implementation(model);
-
-  } else if (argc == 3) {
-
-    images = model.read_file(argv[1]);
-    labels_from_file = model.read_label(argv[2]);
-
-    file_table = model.read_table("/Users/chinmaya/CLionProjects/naivebayes-chinmayasharma/data/data.txt");
-    model.initialize_table(file_table);
-
-    default_implementation(model);
-
-  } else {
-
+  if (choice == "yes") {
     images = model.read_file("../data/testimages");
     labels_from_file = model.read_label("../data/testlabels");
 
-    default_implementation(model);
+  } else {
 
+    string file_path;
+    cout << "Please enter file for images: ";
+    cin >> file_path;
+    images = model.read_file(file_path);
+
+    cout << "Please enter file for labels: ";
+    cin >> file_path;
+    labels_from_file = model.read_label(file_path);
+
+    do {
+      cout << "Do you wish to provide a probability file? (yes/no)" << endl;
+      cin >> choice;
+    } while (choice != "yes" and choice != "no");
+
+    if (choice == "yes") {
+      cout << "Please enter file for data table: ";
+      cin >> file_path;
+      file_table = model.read_table(file_path);
+      cout << "hey";
+      model.update_table(file_table);
+    }
   }
+
+  default_implementation(model);
+
   return 0;
 }
 

@@ -21,7 +21,7 @@ class Model {
   void save_table();
   std::vector<Digit> get_digits();
   std::vector<string> split(string str);
-  void initialize_table(std::vector<std::vector<std::vector<double>>> probability_table);
+  void update_table(std::vector<std::vector<std::vector<double>>> probability_table);
 };
 
 #endif //NAIVEBAYES_TRAINING_H

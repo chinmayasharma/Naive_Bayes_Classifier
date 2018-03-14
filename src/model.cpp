@@ -108,8 +108,22 @@ std::vector<Image> Model::read_file(string file_path) {
 std::vector<std::vector<std::vector<double>>> Model::read_table(string table_path) {
   std::vector<string> string_table(28);
   std::vector<double> digit_table(28);
-  std::vector<std::vector<double>> line_table;
+  std::vector<std::vector<double>> line_table(28);
   std::vector<std::vector<std::vector<double>>> complete_table;
+
+  for (int i = 0; i < no_of_digits; i++) {
+    std::vector<std::vector<double>> double_vector(28);
+
+    for (int j = 0; j < 28; j++) {
+      std::vector<double> one_d(28);
+
+      for (int k = 0; k < 28; k++) {
+        one_d.push_back(0);
+      }
+      double_vector.push_back(one_d);
+    }
+    complete_table.push_back(double_vector);
+  }
 
   string table_line;
   ifstream table_reader;
@@ -225,6 +239,10 @@ void Model::save_table() {
   file_writer.close();
 }
 
+/**
+ * Getter for digits
+ * @return vector of digits
+ */
 std::vector<Digit> Model::get_digits() {
   return digits;
 }
@@ -233,7 +251,7 @@ std::vector<Digit> Model::get_digits() {
  * Splits a string by space
  *
  * @param str line to bbe split
- * @return vector of stirngs
+ * @return vector of strings
  */
 std::vector<string> Model::split(string str) {
   auto *char_string = const_cast<char *>(str.c_str());
@@ -252,7 +270,7 @@ std::vector<string> Model::split(string str) {
  *
  * @param probability_table 2-D vector of all probabilities
  */
-void Model::initialize_table(std::vector<std::vector<std::vector<double>>> probability_table) {
+void Model::update_table(std::vector<std::vector<std::vector<double>>> probability_table) {
   for (int i = 0; i < no_of_digits; i++) {
     digits[i].set_table(probability_table[i]);
   }
