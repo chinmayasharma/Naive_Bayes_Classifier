@@ -2,7 +2,6 @@
 #include "catch.hpp"
 #include "../src/image.h"
 #include "../src/model.h"
-#include "../src/digit.h"
 
 /**
  * **************************************************************************************************************
@@ -40,6 +39,12 @@ TEST_CASE("invalid_read_label_last_content_test") {
 }
 
 TEST_CASE("valid_read_label_last_content_test") {
+  Model model("../data/trainingimages", "../data/testlabels");
+
+  REQUIRE (5 == model.read_label("../data/testlabels")[999]);
+}
+
+TEST_CASE("invalid_name") {
   Model model("../data/trainingimages", "../data/testlabels");
 
   REQUIRE (5 == model.read_label("../data/testlabels")[999]);
@@ -124,4 +129,16 @@ TEST_CASE("valid_digit_probability_nine_test") {
   REQUIRE (0.000201939 - model.get_digits()[9].get_table()[27][27] < 0.00001);
 }
 
+/**
+* **************************************************************************************************************
+* Matches Tests
+* **************************************************************************************************************
+*/
 
+TEST_CASE("invalid_matches") {
+  Model model("../data/trainingimages", "../data/traininglabels");
+  model.categorize_images();
+  model.initial_digits();
+
+  REQUIRE (0.000201939 - model.get_digits()[9].get_table()[27][27] < 0.00001);
+}
