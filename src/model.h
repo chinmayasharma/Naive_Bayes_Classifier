@@ -20,7 +20,7 @@ class Model {
   int classify(Image image);
   void save_table();
   std::vector<Digit> get_digits();
-  std::vector<string> split(string str, string sep);
+  std::vector<string> split(string str);
   void initialize_table(std::vector<std::vector<std::vector<double>>> probability_table);
 };
 

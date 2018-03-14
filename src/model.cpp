@@ -15,13 +15,13 @@ using std::getline;
 using std::ofstream;
 using std::istringstream;
 
+const int no_of_digits = 10;
+static int line_number = 0;
+
 std::vector<Digit> digits;
 std::vector<Image> all_images;
 std::vector<int> labels;
 std::vector<std::vector<Image>> categorized_Images;
-
-const int no_of_digits = 10;
-static int line_number = 0;
 
 Model::Model(string file_path, string label_path) {
 
@@ -98,7 +98,7 @@ std::vector<std::vector<std::vector<double>>> Model::read_table(string table_pat
 
     while (getline(table_reader, table_line)) {
       if (!table_line.empty()) {
-        string_table = split(table_line, " ");
+        string_table = split(table_line);
 
         for (const auto &i : string_table) {
           digit_table.push_back(stod(i));
@@ -189,19 +189,30 @@ std::vector<Digit> Model::get_digits() {
   return digits;
 }
 
-std::vector<string> Model::split(string str, string sep) {
-  char *cstr = const_cast<char *>(str.c_str());
+/**
+ * Splits a string b
+ *
+ * @param str
+ * @param sep
+ * @return
+ */
+std::vector<string> Model::split(string str) {
+  auto *char_string = const_cast<char *>(str.c_str());
   char *current;
-  std::vector<std::string> arr;
-  current = strtok(cstr, sep.c_str());
+  std::vector<std::string> holder;
+  current = strtok(char_string, " ");
 
   while (current != NULL) {
-    arr.push_back(current);
-    current = strtok(NULL, sep.c_str());
+    holder.push_back(current);
+    current = strtok(NULL, " ");
   }
-  return arr;
+  return holder;
 }
 
+/**
+ *
+ * @param probability_table 2-D vecotr of all probabilities
+ */
 void Model::initialize_table(std::vector<std::vector<std::vector<double>>> probability_table) {
   for (int i = 0; i < no_of_digits; i++) {
     digits[i].set_table(probability_table[i]);

@@ -24,6 +24,13 @@ std::vector<std::vector<Image>> classified;
 
 long image_size = 0;
 
+/**
+ * Main method for naive bayes.
+ *
+ * @param argc number of command line arguments
+ * @param argv string array of command line arguments
+ * @return 0 if no errors encountered
+ */
 int main(int argc, char *argv[]) {
   string choice;
 
@@ -48,38 +55,36 @@ int main(int argc, char *argv[]) {
 
     images = model.read_file(argv[1]);
     labels_from_file = model.read_label(argv[2]);
+
     file_table = model.read_table(argv[3]);
     model.initialize_table(file_table);
+
     default_implementation(model);
 
   } else if (argc == 3) {
+
     images = model.read_file(argv[1]);
     labels_from_file = model.read_label(argv[2]);
+
     file_table = model.read_table("/Users/chinmaya/CLionProjects/naivebayes-chinmayasharma/data/data.txt");
     model.initialize_table(file_table);
+
     default_implementation(model);
 
   } else {
 
-    do {
-      cout << "Do you wish to run default? (yes/no)" << endl;
-      cin >> choice;
-    } while (choice != "yes" and choice != "no");
+    images = model.read_file("../data/testimages");
+    labels_from_file = model.read_label("../data/testlabels");
 
-    if (choice == "yes") {
-      default_implementation(model);
+    default_implementation(model);
 
-    } else {
-      string file_path;
-      cout << "Please enter file for images: ";
-      cin >> file_path;
-    }
-    return 0;
   }
+  return 0;
 }
 
 void evaluate(int matches) {
-  double accuracy = (matches * 100) / image_size;
+
+  double accuracy = (matches * 100.0) / image_size;
   std::cout << "\n\nAccuracy: " << accuracy << "%" << endl << "\n\n\t";
 
   for (int i = 0; i < no_of_digits; i++) {
@@ -97,10 +102,13 @@ void evaluate(int matches) {
   }
 }
 
+/**
+ * Part of implementation common for all inputs.
+ *
+ * @param current_model copy of current model
+ */
 void default_implementation(Model current_model) {
 
-  images = current_model.read_file("../data/testimages");
-  labels_from_file = current_model.read_label("../data/testlabels");
   int matches = 0;
   image_size = images.size();
   confusion_matrix.reserve(no_of_digits);
@@ -139,13 +147,22 @@ void default_implementation(Model current_model) {
   }
 }
 
+/**
+ * Categorizes image for printing best and worst digit prototypes
+ *
+ * @param existing_model copy of existing model
+ * @param file_images list of all images from file
+ * @param file_label list of all labels from file
+ */
 void categorize_images(Model existing_model, std::vector<Image> file_images, std::vector<int> file_label) {
 
   classified.reserve(no_of_digits);
+
   for (int i = 0; i < no_of_digits; i++) {
     std::vector<Image> image_vector;
     classified.push_back(image_vector);
   }
+
   for (int i = 0; i < file_label.size(); i++) {
     classified[file_label[i]].push_back(file_images[i]);
   }
