@@ -20,6 +20,9 @@
 *.mod
 *.smod
 
+# Data Files
+data/*
+
 # Compiled Static libraries
 *.lai
 *.la
