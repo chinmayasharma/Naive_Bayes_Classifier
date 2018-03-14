@@ -17,7 +17,7 @@ class Model {
   void background_check(string line, std::vector<Image> &images);
   void categorize_images();
   void initial_digits();
-  int classify(Image image);
+  int most_probable_image(Image image);
   void save_table();
   std::vector<Digit> get_digits();
   std::vector<string> split(string str);

@@ -23,6 +23,12 @@ std::vector<Image> all_images;
 std::vector<int> labels;
 std::vector<std::vector<Image>> categorized_Images;
 
+/**
+ * Constructor for models
+ *
+ * @param file_path  filepath for training
+ * @param label_path filepath for training
+ */
 Model::Model(string file_path, string label_path) {
 
   pixels.reserve(28);
@@ -39,6 +45,11 @@ Model::Model(string file_path, string label_path) {
   all_images = read_file(file_path);
 }
 
+/**
+ *
+ * @param label_path path to read file
+ * @return vector of labels
+ */
 std::vector<int> Model::read_label(string label_path) {
   std::vector<int> local_labels;
   string digit_line;
@@ -61,6 +72,11 @@ std::vector<int> Model::read_label(string label_path) {
   return local_labels;
 }
 
+/**
+ *
+ * @param file_path path to read file
+ * @return vector of image
+ */
 std::vector<Image> Model::read_file(string file_path) {
 
   std::vector<Image> local_images;
@@ -84,6 +100,11 @@ std::vector<Image> Model::read_file(string file_path) {
   return local_images;
 }
 
+/**
+ *
+ * @param table_path path to read file
+ * @return 3-D vector of probabilities
+ */
 std::vector<std::vector<std::vector<double>>> Model::read_table(string table_path) {
   std::vector<string> string_table(28);
   std::vector<double> digit_table(28);
@@ -117,6 +138,11 @@ std::vector<std::vector<std::vector<double>>> Model::read_table(string table_pat
   return complete_table;
 }
 
+/**
+ *  Checks for foreground and background elements
+ * @param line line to be checked
+ * @param images 2-D image vector
+ */
 void Model::background_check(string line, std::vector<Image> &images) {
 
   int element_count = 0;
@@ -136,6 +162,9 @@ void Model::background_check(string line, std::vector<Image> &images) {
   }
 }
 
+/**
+ * Categorizes images
+ */
 void Model::categorize_images() {
 
   categorized_Images.reserve(10);
@@ -148,6 +177,9 @@ void Model::categorize_images() {
   }
 }
 
+/**
+ * Creates initial digits
+ */
 void Model::initial_digits() {
 
   for (int i = 0; i < 10; i++) {
@@ -156,7 +188,12 @@ void Model::initial_digits() {
   }
 }
 
-int Model::classify(Image image) {
+/**
+ *
+ * @param image image to eb classified
+ * @return label of classification
+ */
+int Model::most_probable_image(Image image) {
   double max = -1000;
   int index_of_max = 0;
 
@@ -170,6 +207,9 @@ int Model::classify(Image image) {
   return index_of_max;
 }
 
+/**
+ *  Saves table to file
+ */
 void Model::save_table() {
   ofstream file_writer;
   file_writer.open("/Users/chinmaya/CLionProjects/naivebayes-chinmayasharma/data/data.txt");
@@ -190,11 +230,10 @@ std::vector<Digit> Model::get_digits() {
 }
 
 /**
- * Splits a string b
+ * Splits a string by space
  *
- * @param str
- * @param sep
- * @return
+ * @param str line to bbe split
+ * @return vector of stirngs
  */
 std::vector<string> Model::split(string str) {
   auto *char_string = const_cast<char *>(str.c_str());
@@ -211,7 +250,7 @@ std::vector<string> Model::split(string str) {
 
 /**
  *
- * @param probability_table 2-D vecotr of all probabilities
+ * @param probability_table 2-D vector of all probabilities
  */
 void Model::initialize_table(std::vector<std::vector<std::vector<double>>> probability_table) {
   for (int i = 0; i < no_of_digits; i++) {

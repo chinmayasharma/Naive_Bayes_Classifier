@@ -124,7 +124,7 @@ void default_implementation(Model current_model) {
   }
 
   for (int i = 0; i < images.size(); i++) {
-    int predicted = current_model.classify(images[i]);
+    int predicted = current_model.most_probable_image(images[i]);
     confusion_matrix[labels_from_file[i]][predicted]++;
 
     if (labels_from_file[i] == predicted) {
