@@ -74,6 +74,10 @@ void Digit::probability_count() {
   }
 }
 
+int Digit::get_label() {
+  return label;
+}
+
 /**
  *
  * @return table of probabilities
